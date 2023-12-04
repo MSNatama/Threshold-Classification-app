@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rice Plant Disease Classification</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ADE8F4;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #023E8A; 
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .upload-area {
+            background-color: #00B4D8; 
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px auto;
+            box-sizing: border-box; 
+        }
+        
+        input[type="file"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #00B4D8;
+        }
+        
+        .button {
+            background-color: #007BFF; 
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 4px;
+            margin-top: 10px; 
+        }
+        
+        button:hover {
+            background-color: #ADE8F4; 
+        }
+        
+        .image-container img{
+            max-width: 100%; 
+            height: auto; 
+            max-height: 400px;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f0f0; 
+            position: relative;
+            display: inline-block;
+        }
+    </style>    
+</head>
+<body>
+    <div class="container">
+        <h1>Rice Plant Disease Classification</h1>
+        <div class="upload-area">
+            <form action="/predict/" method="post" enctype="multipart/form-data">
+                <input type="file" id="image" name="file" accept=".jpg, .jpeg, .png" required>
+                <div style="display: flex; justify-content: center; gap: 10px;">
+                    <button type="submit">Predict</button>
+                    <button type="button" onclick="resetForm()">Reset</button>
+                </div>
+            </form>
+        </div>
+        <h2>Original Image:</h2>
+        <div class="image-container">
+            <img id="originalImage" {% if data %} src="data:image/png;base64,{{ data.original_image_b64 }}" {% else %} src="https://placehold.co/200x200?text=Original+Image" {% endif %} alt="Original Image">
+        </div>
+        <h2>Segmented Image:</h2>
+        <div class="image-container">
+            <img id="segmentedImage" {% if data %} src="data:image/png;base64,{{ data.thresholded_image_b64 }}" {% else %} src="https://placehold.co/200x200?text=Segmented+Image" {% endif %} alt="Segmented Image">
+        </div>
+        <h2>Prediction:</h2>
+        <div class="prediction">
+            <p id="prediction">{% if data %}{{ data.prediction }}{% endif %}</p>
+        </div>    
+    </div>    
+    
+    <script>
+        function resetForm() {
+            window.location.href = "/";
+        }
+        </script>
+</body>
+</html>
